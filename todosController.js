@@ -1,7 +1,7 @@
 const createError = require("http-errors")
 const  ObjectId = require('mongodb').ObjectId;
-let todoList = []
-let idno = 0
+//let todoList = []
+//let idno = 0
 
 const { MongoClient } = require('mongodb');
 const uri = "mongodb+srv://mongo-colin:p4ssw0rd@cluster0.ywlkz.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
@@ -33,7 +33,8 @@ exports.create = async function (req,res,next){
         collection.insertOne(
             {
                 name: req.body.name,
-                description: req.body.description
+                description: req.body.description,
+                completed: req.body.completed
             }
         )
         .then(() => res.send({result: "true"}))
@@ -46,7 +47,7 @@ exports.create = async function (req,res,next){
         name: req.body.name,
         description: req.body.description
     });*/
-    idno++;
+    //idno++;
     //res.send({result: "true"})
 }
 
