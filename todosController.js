@@ -18,7 +18,7 @@ exports.index = async function(req,res){
         const findPromise = collection.find()
         res.send(await findPromise.toArray())
         
-        client.close();
+        
       });
 }
 
@@ -38,7 +38,7 @@ exports.create = async function (req,res,next){
         )
         .then(() => res.send({result: "true"}))
         
-        client.close();
+        
     });
     
     /*todoList.push({
@@ -50,7 +50,7 @@ exports.create = async function (req,res,next){
     //res.send({result: "true"})
 }
 
-exports.show = function (req,res,next) {
+exports.show = async function (req,res,next) {
 
     client.connect(async (err) => {
         const collection = client.db("bliss-bakery").collection("todo");
@@ -65,7 +65,7 @@ exports.show = function (req,res,next) {
         })
         .catch ( err => console.log(err))
 
-        client.close();
+       
 });  /*
     const todoItem = todoList.find( (item) => item.id == req.params.id )
     if(!todoItem) {
@@ -87,7 +87,7 @@ exports.update = async function (req,res,next){
         }
         return (next(createError(404,"no todo with that id")))
 
-        client.close();
+      
 }); 
     
 }
@@ -104,7 +104,7 @@ exports.delete = function (req,res,next) {
             }
             return (next(createError(404,"no todo with that id")))
         })
-        client.close();
+       
     }); 
     
     
