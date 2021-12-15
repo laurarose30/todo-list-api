@@ -1,25 +1,14 @@
 const createError = require("http-errors")
 const  ObjectId = require('mongodb').ObjectId;
+const {Todo} = require('./models/todos')
 //let todoList = []
 //let idno = 0
 
-const { MongoClient } = require('mongodb');
-const uri = "mongodb+srv://mongo-colin:p4ssw0rd@cluster0.ywlkz.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
-//const uri = "mongodb+srv://Sazzle:sazzlemongo1@cluster0.opbm5.mongodb.net/myFirstDatabase?retryWrites=true&w=majority"
-const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
-
-
 exports.index = async function(req,res){
    
-    client.connect(async (err) => {
-        const collection = client.db("bliss-bakery").collection("todo");
-        // perform actions on the collection object
-        
-        const findPromise = collection.find()
-        res.send(await findPromise.toArray())
-        
-        
-      });
+    Todo.find()
+        .then( todos => res.send(todos))
+   
 }
 
 exports.create = async function (req,res,next){
@@ -27,86 +16,60 @@ exports.create = async function (req,res,next){
         return (next(createError(400,"name is required")))
     }
 
-    client.connect(async (err) => {
-        const collection = client.db("bliss-bakery").collection("todo");
-        // perform actions on the collection object
-        collection.insertOne(
-            {
-                name: req.body.name,
-                description: req.body.description,
-                completed: req.body.completed
-            }
-        )
-        .then(() => res.send({result: "true"}))
-        
-        
-    });
-    
-    /*todoList.push({
-        id: idno,
+    const todo = new Todo({
         name: req.body.name,
-        description: req.body.description
-    });*/
-    //idno++;
-    //res.send({result: "true"})
+        description: req.body.description,
+        completed: req.body.completed
+    })
+    todo.save()
+    .then( () => res.send({result:true}) )
+
+    
+   
 }
 
 exports.show = async function (req,res,next) {
 
-    client.connect(async (err) => {
-        const collection = client.db("bliss-bakery").collection("todo");
-        // perform actions on the collection object
-        collection.findOne({ _id: ObjectId( req.params.id)})
-        .then( (todoItem) => {
-            if(!todoItem){
+    Todo.findOne({ _id: ObjectId( req.params.id)})
+    .then( (todoItem)=> {
+        if(!todoItem){
             return (next(createError(404,"no todo with that id")))
             }
             res.send(todoItem);
 
-        })
-        .catch ( err => console.log(err))
-
-       
-});  /*
-    const todoItem = todoList.find( (item) => item.id == req.params.id )
-    if(!todoItem) {
-        return (next(createError(404,"no todo with that id")))
-    }
-
-    res.send(todoItem)*/
+    })
 
 }
 
 exports.update = async function (req,res,next){
 
-    client.connect(async (err) => {
-        const collection = client.db("bliss-bakery").collection("todo");
-        // perform actions on the collection object
-        const r = await (await collection).updateOne({ _id: ObjectId(req.params.id)},{ $set: {name:req.body.name, description:req.body.description,completed: req.body.completed}})
-        if(r.matchedCount){
-            return res.send({result:true})
-        }
-        return (next(createError(404,"no todo with that id")))
 
-      
-}); 
-    
+    Todo.findOne({ _id: ObjectId( req.params.id)})
+    .then( (todoItem)=> {
+        if(!todoItem){
+            return (next(createError(404,"no todo with that id")))
+            }
+           
+            todoItem.name = req.body.name
+            todoItem.description = req.body.description
+            todoItem.completed = req.body.completed
+            todoItem.save()
+            .then (() => res.send({result:true}))
+
+    })
+
 }
 
 exports.delete = function (req,res,next) {
-    //verifying
-    client.connect(async (err) => {
-        const collection = client.db("bliss-bakery").collection("todo");
-        // perform actions on the collection object
-        collection.deleteOne({ _id: ObjectId(req.params.id)})
-        .then ((r) => {
-            if(r.deletedCount){
-                return res.send({result:true});
-            }
-            return (next(createError(404,"no todo with that id")))
-        })
-       
-    }); 
-    
+
+    Todo.deleteOne({ _id: ObjectId(req.params.id)})
+    .then( (r) =>{
+        if(r.deletedCount){
+            return res.send({result:true});
+        }
+        return (next(createError(404,"no todo with that id")))
+
+    })
+    .catch( (err)  => console.log(err))
     
 }
