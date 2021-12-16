@@ -1,13 +1,14 @@
 const express =require('express')
 const router = express.Router();
-const todosController = require('./todosController')
+const booksController = require('./booksController')
 
-router.put('/todo/:id',todosController.update)
-router.delete('/todo/:id',todosController.delete)
+router.put('/book/:id',booksController.update)
+router.delete('/book/:id',booksController.delete)
 
+router.get('/author/author', booksController.index)
 
-router.get('/todo',todosController.index)
-router.post('/todo/create',todosController.create)
-router.get('/todo/:id',todosController.show)
+router.get('/book',booksController.index)
+router.post('/book/create',booksController.create)
+router.get('/book/:id',booksController.show)
 
 module.exports = router;

@@ -6,7 +6,7 @@ const mongoose = require('mongoose');
 
 app.use(express.json())
 app.use(router)
-const uri = "mongodb+srv://anon45:IHATEDATABASES@cluster0.invl2.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
+const uri = "mongodb+srv://anon45:IHATEDATABASES@cluster0.invl2.mongodb.net/mydata?retryWrites=true&w=majority";
 mongoose.connect(uri);
 
 app.listen(port, () =>{
