@@ -16,12 +16,12 @@ exports.create = async function (req, res, next) {
         return (next(createError(400, "author is required")))
     }
 
-    const todo = new Book({
+    const book = new Book({
         author: req.body.author,
         title: req.body.title,
         status: req.body.status
     })
-    todo.save()
+    book.save()
         .then(() => res.send({ result: true }))
 
 
