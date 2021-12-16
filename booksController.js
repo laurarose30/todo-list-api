@@ -75,10 +75,20 @@ exports.delete = function (req, res, next) {
 }
 
 exports.showauthor = async function (req, res, next) {
-    Book.findOne({ author: req.params.author })
+    Book.find({ author: req.params.author})
         .then((bookItem) => {
             if (!bookItem) {
                 return (next(createError(404, "no book with that author")))
+            }
+            res.send(bookItem);
+        });
+}
+
+exports.showtitle = async function (req, res, next) {
+    Book.find({ title: req.params.title })
+        .then((bookItem) => {
+            if (!bookItem) {
+                return (next(createError(404, "no book with that title")))
             }
             res.send(bookItem);
         });

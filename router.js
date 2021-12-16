@@ -7,6 +7,7 @@ router.delete('/book/:id',booksController.delete)
 
 router.get('/author/author', booksController.index)
 router.get('/author/:author', booksController.showauthor)
+router.get('/title/:title', booksController.showtitle)
 
 router.get('/book',booksController.index)
 router.post('/book/create',booksController.create)
